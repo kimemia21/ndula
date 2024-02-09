@@ -24,6 +24,13 @@ class _TopBarState extends State<TopBar> {
           _selectedIndex = index;
         }),
         items: [
+            FlashyTabBarItem(
+            icon: Icon(SimpleIcons.shopee,size: MediaQuery.of(context).size.height*0.04,),
+            title: Text('All'),
+            activeColor: Colors.blue.shade200,
+            inactiveColor: Color.fromARGB(255, 46, 46, 46),
+          ),
+        
           FlashyTabBarItem(
           
             icon: Icon(SimpleIcons.jordan,size: MediaQuery.of(context).size.height*0.04,),

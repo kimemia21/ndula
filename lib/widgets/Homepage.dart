@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ndula/widgets/BrandBar.dart';
+import 'package:ndula/widgets/Homepagebody.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -26,8 +27,17 @@ class _HomepageState extends State<Homepage> {
           child: ListView(
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
-            children: [storeLocation(context), 
-            TopBar()],
+            children: [
+              Positioned(
+                top: 200.0,
+                child:Column(children: [ storeLocation(context), 
+            TopBar(),],) 
+              ),
+            
+
+              
+           
+            BodyHomepage()],
           )),
     );
   }

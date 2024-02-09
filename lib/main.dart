@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ndula/widgets/BottmNavBar.dart';
 import 'package:ndula/widgets/Carousel.dart';
 
 void main() {
@@ -14,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      
       home: Scaffold(
+        bottomNavigationBar:bottomNavBar() ,
         body: loginCarousel(),
       )
     );
