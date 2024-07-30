@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ndula/widgets/BrandBar.dart';
 import 'package:ndula/widgets/Homepage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -41,32 +42,42 @@ class _loginCarouselState extends State<loginCarousel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          CarouselSlider.builder(
-              itemCount: imageUrl.length,
-              itemBuilder: (context, index, realindex) {
-                final urlImage = imageUrl[index];
-                return Container(child: buildImage(context, urlImage, index));
-              },
-              options: CarouselOptions(
-                  onPageChanged: (index, reason) =>
-                      setState(() => activeIndex = index),
-                  enableInfiniteScroll: true,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 2),
-                  autoPlayAnimationDuration: Duration(seconds: 1),
-                  autoPlayCurve: Curves.decelerate,
-                  height: MediaQuery.of(context).size.height * 0.5)),
-          buildIndicator(),
-          buildText(context),
-        ],
-      ),
+      padding:EdgeInsets.all(10),
+
+      child:TopBar()
+      // Stack(children: [
+      //   Positioned(child:Text("Login"))
+      // ],)
+
+      // Column(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     CarouselSlider.builder(
+      //         itemCount: imageUrl.length,
+      //         itemBuilder: (context, index, realindex) {
+      //           final urlImage = imageUrl[index];
+      //           return Container(child: buildImage(context, urlImage, index));
+      //         },
+      //         options: CarouselOptions(
+      //             onPageChanged: (index, reason) =>
+      //                 setState(() => activeIndex = index),
+      //             enableInfiniteScroll: true,
+      //             autoPlay: true,
+      //             autoPlayInterval: Duration(seconds: 2),
+      //             autoPlayAnimationDuration: Duration(seconds: 1),
+      //             autoPlayCurve: Curves.decelerate,
+      //             height: MediaQuery.of(context).size.height * 0.5)),
+      //     buildIndicator(),
+      //     buildText(context),
+      //   ],
+      // ),
+
     );
   }
 }
+
+
 
 Widget buildImage(context, String urlImage, int index) {
   return Container(

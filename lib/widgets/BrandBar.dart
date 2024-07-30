@@ -16,15 +16,22 @@ class _TopBarState extends State<TopBar> {
 
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05),
-      child: FlashyTabBar(
+      child: 
+      
+      FlashyTabBar(
         selectedIndex: _selectedIndex,
         showElevation: true,
+        // onpress: (){},
         animationDuration: Duration(milliseconds: 200),
         onItemSelected: (index) => setState(() {
           _selectedIndex = index;
         }),
         items: [
+       
+        
+
             FlashyTabBarItem(
+            // onpress: (){},
             icon: Icon(SimpleIcons.shopee,size: MediaQuery.of(context).size.height*0.04,),
             title: Text('All'),
             activeColor: Colors.blue.shade200,

@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ndula app',
       debugShowCheckedModeBanner: false,
       
       home: Scaffold(
-        bottomNavigationBar:bottomNavBar() ,
+        // bottomNavigationBar:bottomNavBar(),
         body: loginCarousel(),
       )
     );
