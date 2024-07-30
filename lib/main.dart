@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ndula/widgets/BottmNavBar.dart';
 import 'package:ndula/widgets/Carousel.dart';
+import 'package:ndula/widgets/Splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       
       home: Scaffold(
         // bottomNavigationBar:bottomNavBar(),
-        body: loginCarousel(),
+        body: SplashScreen(),
       )
     );
   }
