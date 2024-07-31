@@ -47,6 +47,7 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   flutterzilla_fixed_grid: ^0.0.4
   flashy_tab_bar2: ^0.0.10
+  flutter_native_splash: ^2.4.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,23 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/images/Appicon.jpg"  
+
+  flutter_native_splash:
+    color: "#ffffff"
+    image: assets/images/splash.jpg
+    branding: assets/images/splash.jpg
+    branding_bottom_padding: 24
+    color_dark: "#121212"
+    image_dark: assets/images/splash.jpg
+    branding_dark: assets/images/splash.jpg
+
+    android_12:
+      image: assets/images/splash.jpg
+      icon_background_color: "#ffffff"
+      image_dark: assets/images/splash.jpg
+      icon_background_color_dark: "#121212"
+
+    web: false  
  
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -84,6 +102,8 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
+# flutter_native_splash-acceptance.yaml
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -10,8 +10,35 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   int number = 1;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+      reverseDuration: Duration(seconds: 1),
+    )..repeat(
+        reverse: true); // Repeat the animation in reverse for a pulsing effect
+
+    _animation = Tween<double>(begin: 10.0, end: 30.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,21 +107,48 @@ class _SplashScreenState extends State<SplashScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(1),
-                                  borderRadius: BorderRadiusDirectional.all(
-                                      Radius.circular(10))),
-                              child:
-                              
-                               Text(
-                                "Get started",
-                                style: GoogleFonts.poppins(
+                          AnimatedBuilder(
+                            animation: _animation,
+                            builder: (context, child) {
+                              return Container(
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    // BoxShadow(
+                                    //   color: Colors.red.withOpacity(0.3),
+                                    //   spreadRadius: _animation.value,
+                                    //   blurRadius: _animation.value * 3,
+                                    //   offset: Offset(0, 3),
+                                    // ),
+                                    BoxShadow(
+                                      color: Colors.red.withOpacity(
+                                          0.6), // Increased opacity
+                                      spreadRadius: _animation.value,
+                                      blurRadius: _animation.value * 2,
+                                      offset: Offset(0, 0), // Centered glow
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.red.withOpacity(
+                                          0.6), // Increased opacity
+                                      spreadRadius: _animation.value * 0.8,
+                                      blurRadius: _animation.value * 1.5,
+                                      offset: Offset(0, 0), // Centered glow
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  "Get started",
+                                  style: GoogleFonts.poppins(
                                     fontSize: 18,
                                     color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                              )),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
                         ],
                       ),
                     ),
