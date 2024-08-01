@@ -62,11 +62,51 @@ class Globals {
     }
   }
 
+  static Future<void> switchScreens(
+      {required BuildContext context, required Widget screen}) {
+    try {
+      return Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            transitionDuration: Duration(
+                milliseconds:
+                    600), // Increase duration for a smoother transition
+            pageBuilder: (context, animation, secondaryAnimation) => screen,
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              final opacityTween = Tween(begin: 0.0, end: 1.0);
+              final scaleTween = Tween(
+                  begin: 0.95,
+                  end: 1.0); // Slight scale transition for ambient effect
+              final curvedAnimation = CurvedAnimation(
+                parent: animation,
+                curve:
+                    Curves.easeInOut, // Use easeInOut for a smoother transition
+              );
+
+              return FadeTransition(
+                opacity: opacityTween.animate(curvedAnimation),
+                child: ScaleTransition(
+                  scale: scaleTween.animate(curvedAnimation),
+                  child: child,
+                ),
+              );
+            },
+          ));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+
+
   static TextTheme textTheme(double screenWidth,
       {double? fontSizeLarge, double? fontSizeSmall, double? fontSizeMedium}) {
     fontSizeLarge ??= screenWidth * 0.045;
     fontSizeMedium ??= screenWidth * 0.035;
     fontSizeSmall ??= screenWidth * 0.03;
+
+  
 
     return TextTheme(
       titleLarge: GoogleFonts.poppins(
@@ -87,9 +127,9 @@ class Globals {
           // fontStyle: FontStyle.italic,
           letterSpacing: 1.0),
       bodyLarge: GoogleFonts.poppins(
-          fontSize: 16.0,
+          fontSize: screenWidth*0.08,
           fontWeight: FontWeight.w600,
-          color: Colors.black54,
+          color: Colors.black,
           letterSpacing: 1.0),
     );
   }

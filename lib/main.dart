@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
             home: Scaffold(
               // bottomNavigationBar:bottomNavBar(),
               body:
-              // LoginScreen()
-                SplashScreen(),
+            //  LoginScreen()
+               SplashScreen(),
             )));
   }
 }

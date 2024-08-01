@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/authentication/login.dart';
 import 'package:ndula/widgets/contants.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:provider/provider.dart';
@@ -164,7 +165,7 @@ class _SplashScreenState extends State<SplashScreen>
                               // context.watch<Appbloc>().isconnected
                               Provider.of<Appbloc>(context, listen: false)
                                       .isconnected
-                                  ? print("success")
+                                  ? Globals.switchScreens(context: context, screen: LoginScreen())
                                   : Globals(context: context).nointernet();
                             },
                             child: AnimatedBuilder(
