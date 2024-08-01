@@ -1,7 +1,14 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/globals.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,12 +19,56 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  int number = 1;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  late bool _isconnected;
+  late Timer timer;
+  late StreamSubscription<List<ConnectivityResult>> subscription;
+
   @override
   void initState() {
     super.initState();
+
+    // timer = Timer.periodic(Duration(seconds: 1), (_) {
+    try {
+      bool connection = false;
+      subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> result) {
+        if (result.contains(ConnectivityResult.wifi)) {
+          print(result);
+          connection = true;
+          context.read<Appbloc>().changeConnection(connection);
+        } else if (result.contains(ConnectivityResult.mobile)) {
+          print(result);
+          connection = true;
+          context.read<Appbloc>().changeConnection(connection);
+        } else if (result.contains(ConnectivityResult.none)) {
+          print(result);
+          connection = false;
+          Globals().nointernet(context: context);
+          context.read<Appbloc>().changeConnection(connection);
+         
+        }
+      });
+    } catch (e) {
+      print("got this error in  the init method splashscreen $e");
+      throw Exception(e);
+    }
+
+    // Globals().checkinternet().then((connection) {
+    //   if (connection) {
+    //     print("checking");
+    //     _isconnected = true;
+    //     context.read<Appbloc>().changeConnection(connection);
+    //   } else {
+    //     print("no internet connection");
+    //     Globals().nointernet(context: context);
+    //     context.read<Appbloc>().changeConnection(connection);
+    //   }
+    // });
+    // });
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 1),
@@ -36,6 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     _animationController.dispose();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -107,47 +159,63 @@ class _SplashScreenState extends State<SplashScreen>
                           SizedBox(
                             height: 10,
                           ),
-                          AnimatedBuilder(
-                            animation: _animation,
-                            builder: (context, child) {
-                              return Container(
-                                padding: EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    // BoxShadow(
-                                    //   color: Colors.red.withOpacity(0.3),
-                                    //   spreadRadius: _animation.value,
-                                    //   blurRadius: _animation.value * 3,
-                                    //   offset: Offset(0, 3),
-                                    // ),
-                                    BoxShadow(
-                                      color: Colors.red.withOpacity(
-                                          0.6), // Increased opacity
-                                      spreadRadius: _animation.value,
-                                      blurRadius: _animation.value * 2,
-                                      offset: Offset(0, 0), // Centered glow
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.red.withOpacity(
-                                          0.6), // Increased opacity
-                                      spreadRadius: _animation.value * 0.8,
-                                      blurRadius: _animation.value * 1.5,
-                                      offset: Offset(0, 0), // Centered glow
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  "Get started",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              );
+                          GestureDetector(
+                            onTap: () {
+                              // context.watch<Appbloc>().isconnected
+                              Provider.of<Appbloc>(context, listen: false)
+                                      .isconnected
+                                  ? print("success")
+                                  : Globals().nointernet(context: context);
                             },
+                            child: AnimatedBuilder(
+                              animation: _animation,
+                              builder: (context, child) {
+                                return Container(
+                                  padding: EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      // BoxShadow(
+                                      //   color: Colors.red.withOpacity(0.3),
+                                      //   spreadRadius: _animation.value,
+                                      //   blurRadius: _animation.value * 3,
+                                      //   offset: Offset(0, 3),
+                                      // ),
+                                      BoxShadow(
+                                        color: Colors.red.withOpacity(
+                                            0.6), // Increased opacity
+                                        spreadRadius: _animation.value,
+                                        blurRadius: _animation.value * 2,
+                                        offset: Offset(0, 0), // Centered glow
+                                      ),
+                                      BoxShadow(
+                                        color: Colors.red.withOpacity(
+                                            0.6), // Increased opacity
+                                        spreadRadius: _animation.value * 0.8,
+                                        blurRadius: _animation.value * 1.5,
+                                        offset: Offset(0, 0), // Centered glow
+                                      ),
+                                    ],
+                                  ),
+                                  child: context.watch<Appbloc>().isconnected
+                                      ? Text("Get started")
+
+                                      // ? LoadingAnimationWidget.twistingDots(
+                                      //     leftDotColor: const Color(0xFF1A1A3F),
+                                      //     rightDotColor:
+                                      //         const Color(0xFFEA3799),
+                                      //     size: 20,
+                                      //   )
+                                      : LoadingAnimationWidget.twistingDots(
+                                          leftDotColor: const Color(0xFF1A1A3F),
+                                          rightDotColor:
+                                              const Color(0xFFEA3799),
+                                          size: 20,
+                                        ),
+                                );
+                              },
+                            ),
                           )
                         ],
                       ),
