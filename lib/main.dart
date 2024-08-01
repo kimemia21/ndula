@@ -4,6 +4,7 @@ import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/BottmNavBar.dart';
 import 'package:ndula/widgets/Carousel.dart';
 import 'package:ndula/widgets/Splash.dart';
+import 'package:ndula/widgets/authentication/login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -21,11 +22,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (context) => Appbloc())],
         child: MaterialApp(
+      
             title: 'Ndula app',
             debugShowCheckedModeBanner: false,
             home: Scaffold(
               // bottomNavigationBar:bottomNavBar(),
-              body: SplashScreen(),
+              body:
+              // LoginScreen()
+                SplashScreen(),
             )));
   }
 }

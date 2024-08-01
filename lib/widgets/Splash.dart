@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/contants.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:provider/provider.dart';
 
@@ -46,9 +47,9 @@ class _SplashScreenState extends State<SplashScreen>
         } else if (result.contains(ConnectivityResult.none)) {
           print(result);
           connection = false;
-          Globals().nointernet(context: context);
+
+          Globals(context: context).nointernet();
           context.read<Appbloc>().changeConnection(connection);
-         
         }
       });
     } catch (e) {
@@ -93,6 +94,9 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = Contants(context: context).screenWidth();
+    TextTheme textTheme = Globals.textTheme(screenWidth);
+
     return Container(
       // padding: EdgeInsets.all(4),
       child: Stack(
@@ -103,6 +107,7 @@ class _SplashScreenState extends State<SplashScreen>
                   width: AppWidth(context, 1),
                   height: AppHeight(context, 1),
                   "assets/images/splash.jpg"
+                  // "assets/images/splashthree.jpg"
 
                   // "https://wallpapers.com/images/hd/nike-air-jordan-1-retro-chicago-goj5lj0rsp1329ug.jpg"
                   // // "https://i.pinimg.com/736x/1d/1f/8c/1d1f8c8b77a4dac766ce0ae7e49daabd.jpg"
@@ -143,18 +148,13 @@ class _SplashScreenState extends State<SplashScreen>
                           Text(
                             textAlign: TextAlign.center,
                             "Let's improve your \n appearance",
-                            style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
+                            style:textTheme.titleLarge),
+                            
+                        
                           Text(
                             textAlign: TextAlign.center,
                             "Find shoes to support your daily activites",
-                            style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300),
+                            style: textTheme.titleSmall
                           ),
                           SizedBox(
                             height: 10,
@@ -165,12 +165,14 @@ class _SplashScreenState extends State<SplashScreen>
                               Provider.of<Appbloc>(context, listen: false)
                                       .isconnected
                                   ? print("success")
-                                  : Globals().nointernet(context: context);
+                                  : Globals(context: context).nointernet();
                             },
                             child: AnimatedBuilder(
                               animation: _animation,
                               builder: (context, child) {
                                 return Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
                                   padding: EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -183,14 +185,14 @@ class _SplashScreenState extends State<SplashScreen>
                                       //   offset: Offset(0, 3),
                                       // ),
                                       BoxShadow(
-                                        color: Colors.red.withOpacity(
+                                        color: Colors.blue.withOpacity(
                                             0.6), // Increased opacity
                                         spreadRadius: _animation.value,
                                         blurRadius: _animation.value * 2,
                                         offset: Offset(0, 0), // Centered glow
                                       ),
                                       BoxShadow(
-                                        color: Colors.red.withOpacity(
+                                        color: Colors.green.withOpacity(
                                             0.6), // Increased opacity
                                         spreadRadius: _animation.value * 0.8,
                                         blurRadius: _animation.value * 1.5,
@@ -199,7 +201,13 @@ class _SplashScreenState extends State<SplashScreen>
                                     ],
                                   ),
                                   child: context.watch<Appbloc>().isconnected
-                                      ? Text("Get started")
+                                      ? Text(
+                                          textAlign: TextAlign.center,
+                                          "Get started",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: screenWidth*0.04,
+                                              fontWeight: FontWeight.w500),
+                                        )
 
                                       // ? LoadingAnimationWidget.twistingDots(
                                       //     leftDotColor: const Color(0xFF1A1A3F),

@@ -118,6 +118,11 @@ flutter:
   assets:
     - assets/images/Appicon.jpg
     - assets/images/splash.jpg
+    - assets/images/splashtwo.jpg
+    - assets/images/splashthree.jpg
+    - assets/images/login.webp
+    - assets/images/login.gif
+    - assets/images/logintwo.gif
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
