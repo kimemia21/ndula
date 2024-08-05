@@ -8,8 +8,11 @@ import 'package:ndula/widgets/authentication/login.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureI
+  // nitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

@@ -17,6 +17,7 @@ class _ArrivalsState extends State<Arrivals> {
   int activeIndex = 0;
   final List imageUrl = [
     "https://www.kickgame.com/cdn/shop/products/DR5415-103.1.png?v=1678364171&width=1024",
+    "https://freepngimg.com/save/27428-nike-shoes-transparent-background/800x587",
     "https://www.nike.ae/dw/image/v2/BDVB_PRD/on/demandware.static/-/Sites-akeneo-master-catalog/default/dw4b815cdf/nk/347/8/5/2/6/9/34785269_a422_4181_bf0f_c692c10d325e.png?sw=520&sh=520&sm=fit",
     "https://www.nike.sa/dw/image/v2/BDVB_PRD/on/demandware.static/-/Sites-akeneo-master-catalog/default/dw651f0e1f/nk/b73/9/7/c/2/e/b7397c2e_a99a_41a8_b445_de9ded82681a.png",
     "https://www.nike.ae/dw/image/v2/BDVB_PRD/on/demandware.static/-/Sites-akeneo-master-catalog/default/dw2cf9ce95/nk/51d/3/b/e/b/a/51d3beba_ea5c_4ee6_b702_ba54167ac880.png?sw=520&sh=520&sm=fit",
@@ -49,14 +50,7 @@ class _ArrivalsState extends State<Arrivals> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            margin: EdgeInsets.all(AppHeight(context, 0.01)),
-            child: Text(
-              "New Arrivals",
-              style: GoogleFonts.brunoAce(
-                  textStyle: TextStyle(fontSize: AppHeight(context, 0.02))),
-            ),
-          ),
+         
           Container(
             height: AppHeight(context, 0.2),
             width: AppWidth(context, 1),
@@ -65,6 +59,7 @@ class _ArrivalsState extends State<Arrivals> {
                 itemBuilder: (context, index, realindex) {
                   final urlImage = imageUrl[index];
                   return Container(
+                    margin: EdgeInsets.all(4),
                       width: AppWidth(context, 1),
                       child: buildImage(context, urlImage));
                 },
@@ -76,7 +71,8 @@ class _ArrivalsState extends State<Arrivals> {
                     autoPlayInterval: Duration(seconds: 2),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     autoPlayCurve: Curves.ease,
-                    height: MediaQuery.of(context).size.height * 0.5)),
+                    //  height: MediaQuery.of(context).size.height * 0.5
+                    )),
           ),
           buildIndicator(),
         ],
@@ -90,29 +86,30 @@ Widget buildImage(
   String urlImage,
 ) {
   return Container(
-    margin: EdgeInsets.symmetric(
-        horizontal: AppWidth(context, 0.005),
-        vertical: AppWidth(context, 0.005)),
+    // margin: EdgeInsets.symmetric(
+    //     horizontal:10,
+    //     //  AppWidth(context, 0.005),
+    //     vertical: AppWidth(context, 0.005)),
     decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppHeight(context, 0.02))),
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(10)),
     child: Container(
-      padding: EdgeInsets.all(AppWidth(context, 0.02)),
+      padding: EdgeInsets.all(2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         
         children: [
           Container(
-            margin: EdgeInsets.only(left:AppWidth(context, 0.02 )),
-            padding: EdgeInsets.only(top: AppHeight(context, 0.02)),
-            width: AppWidth(context, 0.37),
+            margin: EdgeInsets.all(5),
+            padding: EdgeInsets.only(top: 1),
+            //  width: AppWidth(context, 1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   child: Text("Best Choice",style: GoogleFonts.brunoAce(textStyle: TextStyle(
-                    fontSize: AppWidth(context, 0.04),
+                    fontSize:16,
                     color: Colors.blue[300],
                     
                     
@@ -120,7 +117,7 @@ Widget buildImage(
                 ),
                 Container(
                   child: Text("Nike Air Jordan 4",style: GoogleFonts.abel(textStyle: TextStyle(
-                    fontSize: AppWidth(context, 0.05),
+                    fontSize: 14,
                     color: Colors.black,
                     
                     

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/Arrivals.dart';
+import 'package:ndula/widgets/HomepagePopular.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:ndula/widgets/homepage/ItemCart.dart';
+import 'package:ndula/widgets/homepage/popular.dart';
 import 'package:simple_icons/simple_icons.dart';
 
 class Homnepage extends StatefulWidget {
@@ -62,50 +67,71 @@ class _HomnepageState extends State<Homnepage> {
       body: Container(
         margin: EdgeInsets.all(10),
         color: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadiusDirectional.circular(10),
-            color: Colors.grey.shade300,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+        child: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Icon(
-                  Icons.search,
-                  size: 20,
-                  color: Colors.black54,
-                ),
+              SizedBox(
+                height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Text(
-                  "Search",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: Colors.black54),
-                ),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadiusDirectional.circular(10),
+                    color: Colors.grey.shade300,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Icon(
+                          Icons.search,
+                          size: 18,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          "Search",
+                          style: GoogleFonts.poppins(
+                              fontSize: 18, color: Colors.black54),
+                        ),
+                      ),
+                    ],
+                  )),
+              Globals.homepageTitles(text: "Brand"),
+              SizedBox(
+                height: 10,
               ),
+              Globals.displayCategory(context: context),
+              Globals.homepageTitles(text: "Categories"),
+              Container(
+                height: AppHeight(context, 0.35),
+                child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Itemcart();
+                    }),
+              ),
+              Container(
+                  margin: EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Globals.homepageTitles(text: "Popular"),
+                      TextButton(
+                          onPressed: () {},
+                          child: Globals.homepageTitles(text: "Show all")),
+                    ],
+                  )),
+                   Arrivals()
             ],
-          )),
-          Container(
-            margin: EdgeInsets.only(top: 10,bottom: 10),
-            alignment: Alignment.topLeft,
-            child: Text("Brand",style: GoogleFonts.poppins(
-              fontSize: 20,
-              color: Colors.black87,fontWeight: FontWeight.w500),),
           ),
-          SizedBox(height: 10,),
-          Globals.displayCategory(context: context)
-          ],
         ),
       ),
     );

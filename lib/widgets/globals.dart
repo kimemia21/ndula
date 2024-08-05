@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -43,8 +45,25 @@ class Globals {
         SizedBox(
           height: 10,
         ),
-        Text(count,style: GoogleFonts.poppins(color: Colors.black54,fontWeight: FontWeight.w600),)
+        Text(
+          count,
+          style: GoogleFonts.poppins(
+            fontSize: 12,
+              color: Colors.black54, fontWeight: FontWeight.w600),
+        )
       ],
+    );
+  }
+
+  static Widget homepageTitles({required String text}) {
+    return Container(
+      margin: EdgeInsets.only(top: 12, bottom: 10),
+      alignment: Alignment.topLeft,
+      child: Text(
+        text,
+        style: GoogleFonts.poppins(
+            fontSize: 10, color: Colors.black87, fontWeight: FontWeight.w500),
+      ),
     );
   }
 
@@ -57,9 +76,7 @@ class Globals {
       SimpleIcons.reebok,
       SimpleIcons.puma,
     ];
-    List itemsCount = [
-      "12","34","54","81","15","83"
-    ];
+    List itemsCount = ["12", "34", "54", "81", "15", "83"];
 
     return Container(
       width: AppWidth(context, 1),
@@ -69,7 +86,10 @@ class Globals {
           scrollDirection: Axis.horizontal,
           physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return brandTile(IconData: icons[index], context: context,count: itemsCount[index]);
+            return brandTile(
+                IconData: icons[index],
+                context: context,
+                count: itemsCount[index]);
           }),
     );
   }
