@@ -46,9 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       print("IS ACCESSED");
       // Process login
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Logging in...')),
-      );
+     
     }
   }
 
