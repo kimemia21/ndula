@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/globals.dart';
-import 'package:ndula/widgets/requests.dart';
+import 'package:ndula/widgets/ServerRequests.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -82,24 +82,45 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  void _login() {
-    if (_formKey.currentState?.validate() ?? false) {
-      Globals(context: context).checkinternet().then((value) {
-        if (value) {
-          loginRequest().login(
-              username: _usernameController.text.trim(),
-              password: _passwordController.text.trim(),
-              context: context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('no internet connection')),
-          );
-        }
-      });
+ void _login() async {
+  if (_formKey.currentState?.validate() ?? false) {
+    try {
+      // Check internet connection
+      bool isConnected = await Globals(context: context).checkinternet();
 
-      // Process login
+      if (!isConnected) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No internet connection')),
+        );
+        return;
+      }
+
+      // Check if another upload is in progress
+      bool isUploading = Provider.of<Appbloc>(context, listen: false).isUploading;
+
+      if (isUploading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please be patient')),
+        );
+        return;
+      }
+
+      // Perform login request
+      await loginRequest().login(
+        username: _usernameController.text.trim(),
+        password: _passwordController.text.trim(),
+        context: context,
+      );
+
+    } catch (e) {
+      // Handle exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: ${e.toString()}')),
+      );
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         BorderRadiusDirectional.circular(20)),
                                 child: context.watch<Appbloc>().isLoading
                                     ? LoadingAnimationWidget.twistingDots(
-                                         leftDotColor: Colors.white,
+                                        leftDotColor: Colors.white,
                                         rightDotColor: Colors.white,
                                         size: 20,
                                       )

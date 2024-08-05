@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +18,13 @@ class Globals {
   double FontSize(double size) {
     double screenWidth = getScreenWidth();
     return screenWidth * size;
+  }
+
+  Widget brandTile({required IconData, required BuildContext context, required }) {
+    return Container(
+      height: 30,
+      width: 50,
+    );
   }
 
   Future<bool> checkinternet() async {
@@ -98,15 +107,11 @@ class Globals {
     }
   }
 
-
-
   static TextTheme textTheme(double screenWidth,
       {double? fontSizeLarge, double? fontSizeSmall, double? fontSizeMedium}) {
     fontSizeLarge ??= screenWidth * 0.045;
     fontSizeMedium ??= screenWidth * 0.035;
     fontSizeSmall ??= screenWidth * 0.03;
-
-  
 
     return TextTheme(
       titleLarge: GoogleFonts.poppins(
@@ -116,7 +121,7 @@ class Globals {
           // fontStyle: FontStyle.italic,
           letterSpacing: 2.0),
       titleMedium: TextStyle(
-          fontSize:fontSizeMedium,
+          fontSize: fontSizeMedium,
           fontWeight: FontWeight.bold,
           color: Colors.white,
           letterSpacing: 1.0),
@@ -127,7 +132,7 @@ class Globals {
           // fontStyle: FontStyle.italic,
           letterSpacing: 1.0),
       bodyLarge: GoogleFonts.poppins(
-          fontSize: screenWidth*0.08,
+          fontSize: screenWidth * 0.08,
           fontWeight: FontWeight.w600,
           color: Colors.black,
           letterSpacing: 1.0),

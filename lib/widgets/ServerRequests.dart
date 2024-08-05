@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ndula/widgets/AppBloc.dart';
+import 'package:ndula/widgets/Homepage.dart';
+import 'package:ndula/widgets/globals.dart';
+import 'package:ndula/widgets/homepage/homepage.dart';
 import 'package:provider/provider.dart';
 
 class loginRequest {
@@ -15,6 +18,7 @@ class loginRequest {
     final body = jsonEncode({"username": username, "password": password});
     try {
       context.read<Appbloc>().changeIsLoading(true);
+      context.read<Appbloc>().changeIsUploading(true);
       print("block1");
       final response = await http.post(Uri.parse(loginUrl),
           body: body, headers: {"Content-Type": "application/json"});
@@ -24,9 +28,11 @@ class loginRequest {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Logging in...')),
         );
+        Globals.switchScreens(context: context, screen: Homnepage());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('error')),
+          
+          SnackBar(content: Text(response.body)),
         );
       }
     } catch (e) {
@@ -36,6 +42,8 @@ class loginRequest {
       );
     } finally {
       context.read<Appbloc>().changeIsLoading(false);
+
+      context.read<Appbloc>().changeIsUploading(false);
     }
   }
 }
