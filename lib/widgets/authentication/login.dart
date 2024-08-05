@@ -1,6 +1,14 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/globals.dart';
+import 'package:ndula/widgets/requests.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +22,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool isSecure = true;
+  late StreamSubscription<List<ConnectivityResult>> subscription;
+
+  @override
+  void initState() {
+    try {
+      bool connection = false;
+      subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> result) {
+        if (result.contains(ConnectivityResult.wifi)) {
+          print(result);
+          connection = true;
+          context.read<Appbloc>().changeConnection(connection);
+        } else if (result.contains(ConnectivityResult.mobile)) {
+          print(result);
+          connection = true;
+          context.read<Appbloc>().changeConnection(connection);
+        } else if (result.contains(ConnectivityResult.none)) {
+          print(result);
+          connection = false;
+
+          Globals(context: context).nointernet();
+          context.read<Appbloc>().changeConnection(connection);
+        }
+      });
+    } catch (e) {
+      print("got this error in  the init method splashscreen $e");
+      throw Exception(e);
+    }
+
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -44,9 +84,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_formKey.currentState?.validate() ?? false) {
-      print("IS ACCESSED");
+      Globals(context: context).checkinternet().then((value) {
+        if (value) {
+          loginRequest().login(
+              username: _usernameController.text.trim(),
+              password: _passwordController.text.trim(),
+              context: context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('no internet connection')),
+          );
+        }
+      });
+
       // Process login
-     
     }
   }
 
@@ -97,17 +148,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 16.0),
                         TextFormField(
-                                   
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            
-                            suffixIcon: IconButton(onPressed: (){
-                              setState(() {
-                                isSecure=!isSecure;
-                              });
-                            },
-                            icon:isSecure?Icon(Icons.visibility):Icon(Icons.visibility_off)
-                           ),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isSecure = !isSecure;
+                                  });
+                                },
+                                icon: isSecure
+                                    ? Icon(Icons.visibility)
+                                    : Icon(Icons.visibility_off)),
                             prefixIcon: Icon(Icons.lock),
                             labelText: 'Password',
                           ),
@@ -127,10 +178,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: Colors.blue,
                                     borderRadius:
                                         BorderRadiusDirectional.circular(20)),
-                                child: Text(
-                                  "Login",
-                                  style: textTheme.titleMedium,
-                                ),
+                                child: context.watch<Appbloc>().isLoading
+                                    ? LoadingAnimationWidget.twistingDots(
+                                         leftDotColor: Colors.white,
+                                        rightDotColor: Colors.white,
+                                        size: 20,
+                                      )
+                                    : Text(
+                                        "Login",
+                                        style: textTheme.titleMedium,
+                                      ),
                                 // onPressed: _login,
                                 // style: ElevatedButton.styleFrom(
                                 //   // primary: Colors.blue.shade300,
