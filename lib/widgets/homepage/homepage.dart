@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ndula/widgets/AppWidth.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:simple_icons/simple_icons.dart';
 
 class Homnepage extends StatefulWidget {
   const Homnepage({super.key});
@@ -101,7 +102,9 @@ class _HomnepageState extends State<Homnepage> {
             child: Text("Brand",style: GoogleFonts.poppins(
               fontSize: 20,
               color: Colors.black87,fontWeight: FontWeight.w500),),
-          )
+          ),
+          SizedBox(height: 10,),
+          Globals.displayCategory(context: context)
           ],
         ),
       ),

@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ndula/widgets/AppWidth.dart';
+import 'package:simple_icons/simple_icons.dart';
 
 class Globals {
   final BuildContext context;
@@ -20,10 +22,55 @@ class Globals {
     return screenWidth * size;
   }
 
-  Widget brandTile({required IconData, required BuildContext context, required }) {
+  static Widget brandTile(
+      {required IconData, required BuildContext context, required count}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.all(5),
+          height: 50,
+          width: 70,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadiusDirectional.circular(10),
+              color: Colors.grey.shade300),
+          child: Icon(
+            IconData,
+            size: 25,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(count,style: GoogleFonts.poppins(color: Colors.black54,fontWeight: FontWeight.w600),)
+      ],
+    );
+  }
+
+  static Widget displayCategory({required BuildContext context}) {
+    List<IconData> icons = [
+      SimpleIcons.nike,
+      SimpleIcons.adidas,
+      SimpleIcons.jordan,
+      SimpleIcons.newbalance,
+      SimpleIcons.reebok,
+      SimpleIcons.puma,
+    ];
+    List itemsCount = [
+      "12","34","54","81","15","83"
+    ];
+
     return Container(
-      height: 30,
-      width: 50,
+      width: AppWidth(context, 1),
+      height: 100,
+      child: ListView.builder(
+          itemCount: icons.length,
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return brandTile(IconData: icons[index], context: context,count: itemsCount[index]);
+          }),
     );
   }
 
