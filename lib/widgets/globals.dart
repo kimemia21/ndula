@@ -57,7 +57,7 @@ class Globals {
 
   static Widget homepageTitles({required String text}) {
     return Container(
-      margin: EdgeInsets.only(top: 12, bottom: 10),
+      margin: EdgeInsets.only(top: 5, bottom: 5),
       alignment: Alignment.topLeft,
       child: Text(
         text,

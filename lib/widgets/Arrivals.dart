@@ -24,16 +24,16 @@ class _ArrivalsState extends State<Arrivals> {
   ];
 
   Widget buildIndicator() => Container(
-        margin:
-            EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.025),
+        // margin:
+        //     EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.025),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedSmoothIndicator(
                 effect: ExpandingDotsEffect(
                     paintStyle: PaintingStyle.fill,
-                    dotWidth: MediaQuery.of(context).size.width * 0.04,
-                    dotHeight: MediaQuery.of(context).size.height * 0.0039,
+                    dotWidth: 12,
+                    dotHeight: 4,
                     activeDotColor: Colors.black),
                 activeIndex: activeIndex,
                 count: imageUrl.length),
@@ -136,6 +136,8 @@ Widget buildImage(
           ),
           
           Image.network(
+            width: 100,
+            height: 100,
             urlImage,
           ),
         ],

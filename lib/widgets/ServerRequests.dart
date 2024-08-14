@@ -6,6 +6,7 @@ import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/Homepage.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:ndula/widgets/homepage/homepage.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class loginRequest {
@@ -28,10 +29,10 @@ class loginRequest {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Logging in...')),
         );
-        Globals.switchScreens(context: context, screen: Homnepage());
+        PersistentNavBarNavigator.pushNewScreen(context, screen: MainApp());
+        // Globals.switchScreens(context: context, screen: MainApp());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          
           SnackBar(content: Text(response.body)),
         );
       }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ndula/widgets/AppHeight.dart';
@@ -8,16 +9,153 @@ import 'package:ndula/widgets/globals.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:ndula/widgets/homepage/ItemCart.dart';
 import 'package:ndula/widgets/homepage/popular.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:simple_icons/simple_icons.dart';
 
-class Homnepage extends StatefulWidget {
-  const Homnepage({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
 
   @override
-  State<Homnepage> createState() => _HomnepageState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _HomnepageState extends State<Homnepage> {
+class _MainAppState extends State<MainApp> {
+  late PersistentTabController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = PersistentTabController(initialIndex: 0);
+  }
+
+
+    List<Widget> _buildScreens() {
+        return [
+          Homepage(),
+          Homepage(),
+          Homepage(),
+          Homepage()
+        ];
+    }
+
+     List<PersistentBottomNavBarItem> _navBarsItems() {
+        return [
+            PersistentBottomNavBarItem(
+                icon: Icon(CupertinoIcons.home),
+                title: ("Home"),
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              
+                // scrollController: ScrollController(),
+                routeAndNavigatorSettings: RouteAndNavigatorSettings(
+                    initialRoute: "/",
+                    routes: {
+                    "/first": (final context) => const Homepage(),
+                    "/second": (final context) => const Homepage(),
+                    },
+                ),
+            ),
+             PersistentBottomNavBarItem(
+                icon: Icon(CupertinoIcons.bell),
+                title: ("Notification"),
+                activeColorPrimary: CupertinoColors.activeOrange,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              
+                // scrollController: ScrollController(),
+                routeAndNavigatorSettings: RouteAndNavigatorSettings(
+                    initialRoute: "/",
+                    routes: {
+                    "/first": (final context) => const Homepage(),
+                    "/second": (final context) => const Homepage(),
+                    },
+                ),
+            ),
+             PersistentBottomNavBarItem(
+                icon: Icon(CupertinoIcons.cart),
+                title: ("Cart"),
+                activeColorPrimary: CupertinoColors.activeGreen,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              
+                // scrollController: ScrollController(),
+                routeAndNavigatorSettings: RouteAndNavigatorSettings(
+                    initialRoute: "/",
+                    routes: {
+                    "/first": (final context) => const Homepage(),
+                    "/second": (final context) => const Homepage(),
+                    },
+                ),
+            ),
+
+            PersistentBottomNavBarItem(
+                icon: Icon(CupertinoIcons.person),
+                title: ("Person"),
+                activeColorPrimary: CupertinoColors.black,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+                // scrollController: _scrollController2,
+                routeAndNavigatorSettings: RouteAndNavigatorSettings(
+                    initialRoute: "/",
+                    routes: {
+                    "/first": (final context) => const Homepage(),
+                    "/second": (final context) => const Homepage(),
+                    },
+                ),
+            ),
+        ];
+    }
+
+  @override
+  Widget build(BuildContext context) {
+    double ScreenWidth = MediaQuery.of(context).size.width;
+    TextTheme textTheme = Globals.textTheme(ScreenWidth);
+    return  Container(
+      
+      decoration: BoxDecoration(
+        image: DecorationImage(image:AssetImage("assets/images/background.jpg"),
+        fit: BoxFit.contain )
+      ),
+      padding: const EdgeInsets.all(8.0),
+      child: PersistentTabView(
+        
+          context,
+          controller: _controller,
+          screens: _buildScreens(),
+          items: _navBarsItems(),
+          handleAndroidBackButtonPress: true, // Default is true.
+          resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
+          stateManagement: true, // Default is true.
+          hideNavigationBarWhenKeyboardAppears: true,
+          // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
+          padding: const EdgeInsets.only(top: 8),
+          backgroundColor: Colors.white,
+          isVisible: true,
+          animationSettings: const NavBarAnimationSettings(
+              navBarItemAnimation: ItemAnimationSettings( // Navigation Bar's items animation properties.
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.ease,
+              ),
+              screenTransitionAnimation: ScreenTransitionAnimationSettings( // Screen transition animation on change of selected tab.
+                  animateTabTransition: true,
+                  duration: Duration(milliseconds: 200),
+                  screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
+              ),
+          ),
+          confineToSafeArea: true,
+          navBarHeight: kBottomNavigationBarHeight,
+          navBarStyle: NavBarStyle.style12, // Choose the nav bar style with this property
+        ),
+    );
+  }
+}
+
+class Homepage extends StatefulWidget {
+  const Homepage({super.key});
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     double ScreenWidth = MediaQuery.of(context).size.width;
@@ -25,7 +163,7 @@ class _HomnepageState extends State<Homnepage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.5),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CircleAvatar(
@@ -119,7 +257,7 @@ class _HomnepageState extends State<Homnepage> {
                     }),
               ),
               Container(
-                  margin: EdgeInsets.all(4),
+                  margin: EdgeInsets.all(2),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -129,7 +267,7 @@ class _HomnepageState extends State<Homnepage> {
                           child: Globals.homepageTitles(text: "Show all")),
                     ],
                   )),
-                   Arrivals()
+              Arrivals(),
             ],
           ),
         ),

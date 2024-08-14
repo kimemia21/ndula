@@ -44,7 +44,7 @@ dependencies:
   google_fonts: ^6.1.0
   # flashy_tab_bar2: ^0.0.6
   simple_icons: ^10.1.3
-  persistent_bottom_nav_bar: ^5.0.2
+  persistent_bottom_nav_bar: ^6.2.1
   flutterzilla_fixed_grid: ^0.0.4
   flashy_tab_bar2: ^0.0.10
   flutter_native_splash: ^2.4.1
@@ -124,6 +124,8 @@ flutter:
     - assets/images/login.webp
     - assets/images/login.gif
     - assets/images/logintwo.gif
+    - assets/images/Back.jpg
+    - assets/images/background.jpg 
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

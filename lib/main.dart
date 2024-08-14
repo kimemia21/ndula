@@ -5,13 +5,15 @@ import 'package:ndula/widgets/BottmNavBar.dart';
 import 'package:ndula/widgets/Carousel.dart';
 import 'package:ndula/widgets/Splash.dart';
 import 'package:ndula/widgets/authentication/login.dart';
+import 'package:ndula/widgets/homepage/homepage.dart';
 import 'package:provider/provider.dart';
+import 'package:ndula/widgets/Homepage.dart';
 
 void main() {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureI
   // nitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -25,14 +27,12 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (context) => Appbloc())],
         child: MaterialApp(
-      
             title: 'Ndula app',
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-              // bottomNavigationBar:bottomNavBar(),
-              body:
-            //  LoginScreen()
-               SplashScreen(),
-            )));
+                // bottomNavigationBar:bottomNavBar(),
+                body:
+                    //  LoginS(creen()
+                    MainApp())));
   }
 }
