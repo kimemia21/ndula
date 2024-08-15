@@ -122,7 +122,8 @@ class _MainAppState extends State<MainApp> {
           screens: _buildScreens(),
           items: _navBarsItems(),
           handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
+          resizeToAvoidBottomInset: true, 
+          // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
           stateManagement: true, // Default is true.
           hideNavigationBarWhenKeyboardAppears: true,
           // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
@@ -131,12 +132,12 @@ class _MainAppState extends State<MainApp> {
           isVisible: true,
           animationSettings: const NavBarAnimationSettings(
               navBarItemAnimation: ItemAnimationSettings( // Navigation Bar's items animation properties.
-                  duration: Duration(milliseconds: 400),
+                  duration: Duration(milliseconds: 700),
                   curve: Curves.ease,
               ),
               screenTransitionAnimation: ScreenTransitionAnimationSettings( // Screen transition animation on change of selected tab.
                   animateTabTransition: true,
-                  duration: Duration(milliseconds: 200),
+                  duration: Duration(milliseconds: 700),
                   screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
               ),
           ),
