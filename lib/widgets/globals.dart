@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +20,45 @@ class Globals {
   double FontSize(double size) {
     double screenWidth = getScreenWidth();
     return screenWidth * size;
+  }
+
+  static Widget offers(BuildContext context) {
+    return Container(
+      // width: AppWidth(context,0.5),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+        Icon(Icons.local_shipping,color: Colors.black,size: 14,),
+        SizedBox(width: 4,),
+        Text("Free Delivery for orders above \$200",style: GoogleFonts.poppins(color: Colors.black,fontSize: 12,fontWeight: FontWeight.w500),)
+      ],));
+  }
+
+  static Widget addToCart(context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadiusDirectional.circular(10),
+          color: Colors.black),
+      width: AppWidth(context, .7),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            CupertinoIcons.cart,
+            color: Colors.white,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            "Add to cart",
+            style: GoogleFonts.poppins(color: Colors.white),
+          )
+        ],
+      ),
+    );
   }
 
   static Widget brandTile(
@@ -48,8 +85,7 @@ class Globals {
         Text(
           count,
           style: GoogleFonts.poppins(
-            fontSize: 12,
-              color: Colors.black54, fontWeight: FontWeight.w600),
+              fontSize: 12, color: Colors.black54, fontWeight: FontWeight.w600),
         )
       ],
     );
