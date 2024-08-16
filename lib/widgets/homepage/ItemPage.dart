@@ -92,7 +92,7 @@ class _ItemPageState extends State<ItemPage> {
                 
                 padding: EdgeInsets.all(14),
                 width: MediaQuery.of(context).size.width,
-                 height: MediaQuery.of(context).size.height * 0.45,
+                //  height: MediaQuery.of(context).size.height * 0.45,
                 decoration: BoxDecoration(
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadiusDirectional.all(Radius.circular(20)

@@ -6,7 +6,12 @@ import 'package:ndula/widgets/homepage/ItemPage.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class Itemcart extends StatefulWidget {
-  const Itemcart({super.key});
+  final name;
+  final brand;
+  final imageUrl;
+  final price;
+  const Itemcart(
+      {required this.brand, required this.name, required this.imageUrl,required this.price});
 
   @override
   State<Itemcart> createState() => _ItemcartState();
@@ -38,17 +43,17 @@ class _ItemcartState extends State<Itemcart> {
               child: Image.network(
                   height: AppHeight(context, 0.3 / 2),
                   width: AppWidth(context, 0.4),
-                  "https://pngimg.com/d/running_shoes_PNG5816.png"),
+                  widget.imageUrl),
             ),
             Text(
-              "Nike Shoe",
+              widget.brand.toString(),
             ),
             Text(
               "Best Selling",
               style: GoogleFonts.poppins(color: Colors.black54),
             ),
             Text(
-              "\$234",
+              widget.price.toString(),
               style: GoogleFonts.poppins(color: Colors.black54),
             )
           ],
