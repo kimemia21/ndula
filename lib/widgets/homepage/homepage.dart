@@ -224,9 +224,12 @@ class _HomepageState extends State<Homepage> {
                           itemCount: shoes.length,
                           itemBuilder: (context, index) {
                             return Itemcart(
+                              likes: shoes[index].likes,
+                              id: shoes[index].id,
                                 brand: shoes[index].brandName,
                                 name: shoes[index].name,
                                 imageUrl: shoes[index].image,
+                                description: shoes[index].description,
                                 price: shoes[index].price);
                           }),
                     ),

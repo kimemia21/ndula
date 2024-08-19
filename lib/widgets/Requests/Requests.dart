@@ -16,7 +16,7 @@ class Requests {
         print("This is the value of body: $body");
 
         // Convert the JSON list to a List<Map<String, dynamic>>
-        final List<Map<String, dynamic>> shoesList = 
+        final List<Map<String, dynamic>> shoesList =
             body.cast<Map<String, dynamic>>();
 
         // Use the static method to convert the list of JSON maps to a list of Shoe objects
@@ -26,6 +26,21 @@ class Requests {
       }
     } catch (e) {
       throw Exception('Failed to load products: $e');
+    }
+  }
+
+  static Future addLike({required int id, required int likes}) async {
+    String url = "$_url/shoes/$id";
+    final body = jsonEncode({"likes": likes});
+    Map<String, String> headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    final response =
+        await http.patch(Uri.parse(url), body: body, headers: headers);
+    if (response.statusCode == 201) {
+      print("liked");
+    } else {
+      print(response.body);
     }
   }
 }

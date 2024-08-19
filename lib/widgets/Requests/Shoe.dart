@@ -1,13 +1,18 @@
+import 'dart:convert';
+
 class Shoe {
-  final  name;
-  final  price;
-  final  image;
-  final  gender;
-  final  size;
-  final  likes;
-  final  brandName;
+  final id;
+  final name;
+  final price;
+  final image;
+  final gender;
+  final size;
+  final likes;
+  final brandName;
+  final description;
 
   const Shoe({
+    required this.id,
     required this.name,
     required this.price,
     required this.image,
@@ -15,10 +20,12 @@ class Shoe {
     required this.size,
     required this.likes,
     required this.brandName,
+    required this.description,
   });
 
   factory Shoe.fromJson(Map<String, dynamic> json) {
     final requiredKeys = [
+      
       'name',
       'price',
       'image',
@@ -27,16 +34,18 @@ class Shoe {
       'likes',
       'brandName'
     ];
-    
+
     if (requiredKeys.every(json.containsKey)) {
       return Shoe(
-        name: json['name'] ,
-        price: json['price'] ,
-        image: json['image'] ,
-        gender: json['gender'] ,
+        id: json["id"],
+        name: json['name'],
+        price: json['price'],
+        image: json['image'],
+        gender: json['gender'],
         size: json['size'],
         likes: json['likes'],
-        brandName: json['brand_name'] ,     
+        brandName: json['brand_name'],
+        description: json["description"],
       );
     } else {
       throw FormatException("Missing required fields in json for shoe");

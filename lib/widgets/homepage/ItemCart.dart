@@ -1,28 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ndula/global/AnimatedButton.dart';
 import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/Requests/Requests.dart';
 import 'package:ndula/widgets/homepage/ItemPage.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class Itemcart extends StatefulWidget {
+  final id;
+  final likes;
   final name;
   final brand;
   final imageUrl;
   final price;
+  final description;
+
   const Itemcart(
-      {required this.brand, required this.name, required this.imageUrl,required this.price});
+      {required this.id,
+      required this.likes,
+      required this.brand,
+      required this.name,
+      required this.imageUrl,
+      required this.description,
+      required this.price});
 
   @override
   State<Itemcart> createState() => _ItemcartState();
 }
 
 class _ItemcartState extends State<Itemcart> {
+  int number = 1;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onDoubleTap: () {
+        setState(() {
+          number += 1;
+        });
+      },
       onTap: () {
-        PersistentNavBarNavigator.pushNewScreen(context, screen: ItemPage());
+        PersistentNavBarNavigator.pushNewScreen(context,
+            screen: ItemPage(
+                id: widget.id,
+                likes: widget.likes,
+                imageurl: widget.imageUrl,
+                brandName: widget.brand,
+                shoeName: widget.name,
+                price: widget.price,
+                description: widget.description,
+                gender: ""));
       },
       child: Container(
         // height: AppHeight(context, 0.35),
@@ -35,9 +63,7 @@ class _ItemcartState extends State<Itemcart> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.favorite_sharp, color: Colors.red)),
+            AnimatedLikeButton(number: number, id: widget.id),
             Padding(
               padding: EdgeInsets.all(8),
               child: Image.network(
@@ -46,15 +72,17 @@ class _ItemcartState extends State<Itemcart> {
                   widget.imageUrl),
             ),
             Text(
+              number.toString(),
+            ),
+            Text(
               widget.brand.toString(),
             ),
             Text(
-              "Best Selling",
               style: GoogleFonts.poppins(color: Colors.black54),
+              "Best Selling",
             ),
             Text(
               widget.price.toString(),
-              style: GoogleFonts.poppins(color: Colors.black54),
             )
           ],
         ),

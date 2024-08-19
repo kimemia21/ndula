@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ndula/global/AnimatedButton.dart';
 import 'package:ndula/widgets/AppHeight.dart';
 import 'package:ndula/widgets/AppWidth.dart';
 import 'package:ndula/widgets/globals.dart';
@@ -9,7 +10,24 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:badges/badges.dart' as badges;
 
 class ItemPage extends StatefulWidget {
-  const ItemPage({super.key});
+  final imageurl;
+  final brandName;
+  final shoeName;
+  final price;
+  final gender;
+  final description;
+  final id;
+  final likes;
+  const ItemPage(
+      {super.key,
+      required this.id,
+      required this.likes,
+      required this.imageurl,
+      required this.description,
+      required this.brandName,
+      required this.shoeName,
+      required this.price,
+      required this.gender});
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -83,20 +101,19 @@ class _ItemPageState extends State<ItemPage> {
                 alignment: Alignment.center,
                 child: Image.network(
                   fit: BoxFit.contain,
-                  "https://pngimg.com/d/running_shoes_PNG5816.png",
+                  widget.imageurl,
                   width: MediaQuery.of(context).size.width * 0.7,
                   height: MediaQuery.of(context).size.height * 0.35,
                 ),
               ),
               Container(
-                
                 padding: EdgeInsets.all(14),
                 width: MediaQuery.of(context).size.width,
                 //  height: MediaQuery.of(context).size.height * 0.45,
                 decoration: BoxDecoration(
                     color: Colors.grey.shade100,
-                    borderRadius: BorderRadiusDirectional.all(Radius.circular(20)
-                       )),
+                    borderRadius:
+                        BorderRadiusDirectional.all(Radius.circular(20))),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -106,7 +123,7 @@ class _ItemPageState extends State<ItemPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Nike",
+                            widget.brandName,
                             style: GoogleFonts.poppins(
                                 color: Colors.grey,
                                 fontSize: 16,
@@ -137,7 +154,7 @@ class _ItemPageState extends State<ItemPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Nike Running 85",
+                            widget.shoeName,
                             style: GoogleFonts.poppins(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
@@ -149,7 +166,7 @@ class _ItemPageState extends State<ItemPage> {
                                 color: Colors.green.shade300,
                               ),
                               Text(
-                                "235.00",
+                                widget.price.toString(),
                                 style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 16,
@@ -238,7 +255,7 @@ class _ItemPageState extends State<ItemPage> {
                     ),
                     Container(
                       child: Text(
-                        "Aute ad consequat esse ea. Aliquip laboris aliqua deserunt Lorem ut in est dolor exercitation. Do commodo aute veniam amet aliquip aliquip consequat proident non eiusmod.",
+                        widget.description,
                         style: GoogleFonts.poppins(color: Colors.grey.shade700),
                       ),
                     ),
@@ -249,26 +266,26 @@ class _ItemPageState extends State<ItemPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Globals.addToCart(context),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                liked = !liked;
-                              });
-                            },
-                            icon: Icon(
-                              liked
-                                  ? Icons.favorite
-                                  : Icons.favorite_border_outlined,
-                              color: liked ? Colors.red : Colors.black,
-                            ))
+                        AnimatedLikeButton(number: widget.likes, id:widget.id)
+                        // IconButton(
+                        //     onPressed: () {
+                        //       setState(() {
+                        //         liked = !liked;
+                        //       });
+                        //     },
+                        //     icon: Icon(
+                        //       liked
+                        //           ? Icons.favorite
+                        //           : Icons.favorite_border_outlined,
+                        //       color: liked ? Colors.red : Colors.black,
+                        //     ))
                       ],
                     ),
                     SizedBox(
-                      height:5,
+                      height: 5,
                     ),
-                    // this is  to 
+                    // this is  to
                     Globals.offers(context)
-                 
                   ],
                 ),
               )
