@@ -3,6 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:ndula/widgets/AppBloc.dart';
 import 'package:ndula/widgets/BottmNavBar.dart';
 import 'package:ndula/widgets/Carousel.dart';
+import 'package:ndula/widgets/Requests/Requests.dart';
 import 'package:ndula/widgets/Splash.dart';
 import 'package:ndula/widgets/authentication/login.dart';
 import 'package:ndula/widgets/homepage/homepage.dart';
@@ -30,9 +31,13 @@ class MyApp extends StatelessWidget {
             title: 'Ndula app',
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-                // bottomNavigationBar:bottomNavBar(),
-                body:
-                    //  LoginS(creen()
-                    MainApp())));
+     
+                body: RefreshIndicator.adaptive(
+                    child: MainApp(),
+                    onRefresh: () async {
+                      Requests.requestProducts();
+                    })
+                //  LoginS(creen()
+                )));
   }
 }
