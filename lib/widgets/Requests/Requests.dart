@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:ndula/widgets/Requests/Shoe.dart';
 
 class Requests {
-  static final _url = "http://127.0.0.1:8000/api";
+  static final _url = "http://127.0.0.1:8001/api";
 
   static Future<List<Shoe>> requestProducts() async {
     final url = Uri.parse("$_url/shoes");
@@ -38,6 +38,7 @@ class Requests {
     final response =
         await http.patch(Uri.parse(url), body: body, headers: headers);
     if (response.statusCode == 201) {
+      print(response.body);
       print("liked");
     } else {
       print(response.body);

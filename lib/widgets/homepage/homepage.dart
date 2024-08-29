@@ -159,118 +159,122 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  late Future<List<Shoe>> _shoesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _shoesFuture = Requests.requestProducts();
+  }
+
+  Future<void> _refreshShoes() async {
+    setState(() {
+      _shoesFuture = Requests.requestProducts();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget display() {
-      return FutureBuilder<List<Shoe>>(
-        future: Requests.requestProducts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            final shoes = snapshot.data!;
+      return RefreshIndicator(
+        color: Colors.red.shade400,
+        onRefresh: _refreshShoes,
+        child: FutureBuilder<List<Shoe>>(
+          future: _shoesFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              final shoes = snapshot.data!;
 
-            return Container(
-              margin: EdgeInsets.all(10),
-              color: Colors.white,
-              child: SingleChildScrollView(
-                physics: ScrollPhysics(),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.circular(10),
-                          color: Colors.grey.shade300,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Icon(
-                                Icons.search,
-                                size: 18,
-                                color: Colors.black54,
+              return Container(
+                margin: EdgeInsets.all(10),
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(10),
+                            color: Colors.grey.shade300,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Icon(
+                                  Icons.search,
+                                  size: 18,
+                                  color: Colors.black54,
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Text(
-                                "Search",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18, color: Colors.black54),
+                              Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Text(
+                                  "Search",
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 18, color: Colors.black54),
+                                ),
                               ),
-                            ),
-                          ],
-                        )),
-                    Globals.homepageTitles(text: "Brand"),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Globals.displayCategory(context: context),
-                    Globals.homepageTitles(text: "Categories"),
-                    Container(
-                      height: AppHeight(context, 0.35),
-                      child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: shoes.length,
-                          itemBuilder: (context, index) {
-                            return Itemcart(
-                              likes: shoes[index].likes,
-                              id: shoes[index].id,
-                                brand: shoes[index].brandName,
-                                name: shoes[index].name,
-                                imageUrl: shoes[index].image,
-                                description: shoes[index].description,
-                                price: shoes[index].price);
-                          }),
-                    ),
-                    Container(
-                        margin: EdgeInsets.all(2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Globals.homepageTitles(text: "Popular"),
-                            TextButton(
-                                onPressed: () {},
-                                child:
-                                    Globals.homepageTitles(text: "Show all")),
-                          ],
-                        )),
-                    Arrivals(),
-                  ],
+                            ],
+                          )),
+                      Globals.homepageTitles(text: "Brand"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Globals.displayCategory(context: context),
+                      Globals.homepageTitles(text: "Categories"),
+                      Container(
+                        height: AppHeight(context, 0.35),
+                        child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: shoes.length,
+                            itemBuilder: (context, index) {
+                              return Itemcart(
+                                  likes: shoes[index].likes,
+                                  id: shoes[index].id,
+                                  brand: shoes[index].brandName,
+                                  name: shoes[index].name,
+                                  imageUrl: shoes[index].image,
+                                  description: shoes[index].description,
+                                  price: shoes[index].price,
+                                  onLikeChanged: () {
+                                    _refreshShoes();
+                                  });
+                            }),
+                      ),
+                      Container(
+                          margin: EdgeInsets.all(2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Globals.homepageTitles(text: "Popular"),
+                              TextButton(
+                                  onPressed: () {},
+                                  child:
+                                      Globals.homepageTitles(text: "Show all")),
+                            ],
+                          )),
+                      Arrivals(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-
-            // ListTile(
-            //   leading: Image.network(
-            //     shoe.image,
-            //     width: 50,
-            //     height: 50,
-            //     fit: BoxFit.cover,
-            //     errorBuilder: (context, error, stackTrace) =>
-            //       Icon(Icons.error),
-            //   ),
-            //   title: Text(shoe.name),
-            //   subtitle: Text("Size: ${shoe.size}, Brand: ${shoe.brandName}"),
-            //   trailing: Text("\$${shoe.price}"),
-            //   onTap: () {
-            //     // Handle tap on shoe item
-            //     print("Tapped on ${shoe.name}");
-            //   },
-          } else {
-            return const Center(child: Text('No shoes found'));
-          }
-        },
+              );
+            } else {
+              return const Center(child: Text('No shoes found'));
+            }
+          },
+        ),
       );
     }
 
@@ -318,78 +322,6 @@ class _HomepageState extends State<Homepage> {
                 ))
           ],
         ),
-        body: display()
-
-        //  Container(
-        //   margin: EdgeInsets.all(10),
-        //   color: Colors.white,
-        //   child: SingleChildScrollView(
-        //     physics: ScrollPhysics(),
-        //     child: Column(
-        //       children: [
-        //         SizedBox(
-        //           height: 10,
-        //         ),
-        //         Container(
-        //             width: MediaQuery.of(context).size.width,
-        //             height: 50,
-        //             decoration: BoxDecoration(
-        //               borderRadius: BorderRadiusDirectional.circular(10),
-        //               color: Colors.grey.shade300,
-        //             ),
-        //             child: Row(
-        //               mainAxisAlignment: MainAxisAlignment.start,
-        //               children: [
-        //                 Padding(
-        //                   padding: const EdgeInsets.all(6.0),
-        //                   child: Icon(
-        //                     Icons.search,
-        //                     size: 18,
-        //                     color: Colors.black54,
-        //                   ),
-        //                 ),
-        //                 Padding(
-        //                   padding: const EdgeInsets.all(6.0),
-        //                   child: Text(
-        //                     "Search",
-        //                     style: GoogleFonts.poppins(
-        //                         fontSize: 18, color: Colors.black54),
-        //                   ),
-        //                 ),
-        //               ],
-        //             )),
-        //         Globals.homepageTitles(text: "Brand"),
-        //         SizedBox(
-        //           height: 10,
-        //         ),
-        //         Globals.displayCategory(context: context),
-        //         Globals.homepageTitles(text: "Categories"),
-        //         Container(
-        //           height: AppHeight(context, 0.35),
-        //           child: ListView.builder(
-        //               physics: BouncingScrollPhysics(),
-        //               scrollDirection: Axis.horizontal,
-        //               itemCount: 10,
-        //               itemBuilder: (context, index) {
-        //                 return Itemcart();
-        //               }),
-        //         ),
-        //         Container(
-        //             margin: EdgeInsets.all(2),
-        //             child: Row(
-        //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //               children: [
-        //                 Globals.homepageTitles(text: "Popular"),
-        //                 TextButton(
-        //                     onPressed: () {},
-        //                     child: Globals.homepageTitles(text: "Show all")),
-        //               ],
-        //             )),
-        //         Arrivals(),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        );
+        body: display());
   }
 }

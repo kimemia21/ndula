@@ -32,11 +32,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             home: Scaffold(
      
-                body: RefreshIndicator.adaptive(
-                    child: MainApp(),
-                    onRefresh: () async {
-                      Requests.requestProducts();
-                    })
+                body: MainApp()
                 //  LoginS(creen()
                 )));
   }

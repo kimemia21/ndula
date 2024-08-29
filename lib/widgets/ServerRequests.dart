@@ -10,7 +10,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class loginRequest {
-  final loginUrl = "http://127.0.0.1:8000/api/login";
+  final loginUrl = "http://127.0.0.1:8001/api/login";
 
   Future login(
       {required String username,
