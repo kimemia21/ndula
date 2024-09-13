@@ -56,6 +56,7 @@ dependencies:
   palette_generator: ^0.3.3
   cached_network_image: ^3.2.3  
   flutter_animate: ^4.5.0
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -129,6 +130,7 @@ flutter:
     - assets/images/logintwo.gif
     - assets/images/Back.jpg
     - assets/images/background.jpg 
+    - assets/sound/sound.mp3
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

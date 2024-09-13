@@ -7,7 +7,7 @@ import 'package:ndula/widgets/AppWidth.dart';
 import 'package:ndula/widgets/Arrivals.dart';
 import 'package:ndula/widgets/HomepagePopular.dart';
 import 'package:ndula/widgets/Requests/Requests.dart';
-import 'package:ndula/widgets/Requests/Shoe.dart';
+import 'package:ndula/serializer/Shoe.dart';
 import 'package:ndula/widgets/globals.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:ndula/widgets/homepage/ItemCart.dart';

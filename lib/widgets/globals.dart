@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,7 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ndula/serializer/Brand.dart';
 import 'package:ndula/widgets/AppWidth.dart';
+import 'package:ndula/widgets/Requests/Requests.dart';
 import 'package:simple_icons/simple_icons.dart';
 
 class Globals {
@@ -24,14 +28,25 @@ class Globals {
 
   static Widget offers(BuildContext context) {
     return Container(
-      // width: AppWidth(context,0.5),
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-        Icon(Icons.local_shipping,color: Colors.black,size: 14,),
-        SizedBox(width: 4,),
-        Text("Free Delivery for orders above \$200",style: GoogleFonts.poppins(color: Colors.black,fontSize: 12,fontWeight: FontWeight.w500),)
-      ],));
+        // width: AppWidth(context,0.5),
+        child: Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Icon(
+          Icons.local_shipping,
+          color: Colors.white,
+          size: 14,
+        ),
+        SizedBox(
+          width: 4,
+        ),
+        Text(
+          "Free Delivery for orders above \$200",
+          style: GoogleFonts.poppins(
+              color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+        )
+      ],
+    ));
   }
 
   static Widget addToCart(context) {
@@ -62,7 +77,7 @@ class Globals {
   }
 
   static Widget brandTile(
-      {required IconData, required BuildContext context, required count}) {
+      {required String image, required BuildContext context, required String count}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,10 +89,7 @@ class Globals {
           decoration: BoxDecoration(
               borderRadius: BorderRadiusDirectional.circular(10),
               color: Colors.grey.shade300),
-          child: Icon(
-            IconData,
-            size: 25,
-          ),
+          child:Image.network(image)
         ),
         SizedBox(
           height: 10,
@@ -103,32 +115,74 @@ class Globals {
     );
   }
 
-  static Widget displayCategory({required BuildContext context}) {
-    List<IconData> icons = [
-      SimpleIcons.nike,
-      SimpleIcons.adidas,
-      SimpleIcons.jordan,
-      SimpleIcons.newbalance,
-      SimpleIcons.reebok,
-      SimpleIcons.puma,
-    ];
-    List itemsCount = ["12", "34", "54", "81", "15", "83"];
-
-    return Container(
-      width: AppWidth(context, 1),
-      height: 100,
-      child: ListView.builder(
-          itemCount: icons.length,
-          scrollDirection: Axis.horizontal,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return brandTile(
-                IconData: icons[index],
-                context: context,
-                count: itemsCount[index]);
-          }),
-    );
+  static Future<List<Brand>> fetchBrands({required BuildContext context}) async {
+     List<Brand> brands = await Requests.requestBrand();
+     return brands; // Return the List<Brand>
   }
+
+static Widget displayCategory({required BuildContext context}) {
+  // List of icons and item counts
+  List<IconData> icons = [
+    SimpleIcons.nike,
+    SimpleIcons.adidas,
+    SimpleIcons.jordan,
+    SimpleIcons.newbalance,
+    SimpleIcons.reebok,
+    SimpleIcons.puma,
+  ];
+  List<String> itemsCount = ["12", "34", "54", "81", "15", "83"];
+
+  // Replace the future call with your own method to fetch brands
+ 
+
+  return FutureBuilder<List<Brand>>(
+    future: fetchBrands(context: context), // Use your future method to fetch the brand list
+    builder: (BuildContext context, AsyncSnapshot<List<Brand>> snapshot) {
+      // Error handling
+      if (snapshot.hasError) {
+        return Center(
+          child: Text(snapshot.error.toString()),
+        );
+      }
+      // Show loading spinner while waiting for data
+      else if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      // If data is available, display the list
+      else if (snapshot.hasData) {
+        List<Brand> data = snapshot.data!; // Statically typed as List<Brand>
+        
+        return Container(
+          width: MediaQuery.of(context).size.width, // Adjust width based on context
+          height: 100,
+          child: ListView.builder(
+            itemCount: data.length, // Dynamically set based on data length
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              final brandDetails =data[index];
+              return brandTile(image:brandDetails.brand_logo , context: context, count: "19");
+              // brandTile(
+              //   icon: icons[index], // Icon for each item
+              //   context: context,
+              //   count: itemsCount[index], // Display item count
+              // );
+            },
+          ),
+        );
+      }
+      // If no data available, display an empty message
+      return const Center(
+        child: Text('No data available'),
+      );
+    },
+  );
+}
+
+
+
 
   Future<bool> checkinternet() async {
     final List<ConnectivityResult> connectivityResult =

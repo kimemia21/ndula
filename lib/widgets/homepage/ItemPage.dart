@@ -5,15 +5,16 @@ import 'package:ndula/widgets/globals.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:palette_generator/palette_generator.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ItemPage extends StatefulWidget {
-  final  imageUrl;
-  final  brandName;
-  final  shoeName;
-  final  price;
-  final  gender;
-  final  description;
-  final  id;
+  final String imageUrl;
+  final String brandName;
+  final String shoeName;
+  final double price;
+  final String gender;
+  final String description;
+  final int id;
   final int likes;
 
   const ItemPage({
@@ -38,10 +39,13 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
   List shoeSizeList = [37, 38, 39, 44, 45, 47];
   bool liked = false;
   late AnimationController _colorAnimationController;
+  late AnimationController _fadeAnimationController;
   late Animation<Color?> _colorTween;
+  late Animation<double> _fadeAnimation;
   Color _dominantColor = Colors.grey.shade100;
   Color _textColor = Colors.black;
   Color _backgroundColor = Colors.white;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -50,7 +54,25 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+    _fadeAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _colorTween = ColorTween(
+      begin: Colors.white,
+      end: Colors.white.withOpacity(0.1),
+    ).animate(_colorAnimationController);
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeAnimationController, curve: Curves.easeIn),
+    );
+
     _updatePalette();
+  }
+
+  void _playSound() async {
+    await _audioPlayer.play(AssetSource("sound/sound.mp3"));
   }
 
   Future<void> _updatePalette() async {
@@ -59,17 +81,19 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
     );
     setState(() {
       _dominantColor = generator.dominantColor?.color ?? Colors.grey.shade100;
-      _backgroundColor = _dominantColor.withOpacity(0.1);
-      _textColor = _dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-      _colorTween = ColorTween(begin: Colors.white, end: _backgroundColor)
-          .animate(_colorAnimationController);
+      _backgroundColor = _dominantColor.withOpacity(0.5);
+      _textColor =
+          _dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
     });
     _colorAnimationController.forward();
+    _fadeAnimationController.forward();
   }
 
   @override
   void dispose() {
     _colorAnimationController.dispose();
+    _fadeAnimationController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -110,12 +134,13 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
         );
       },
       child: CustomScrollView(
+        physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             expandedHeight: MediaQuery.of(context).size.height * 0.4,
             floating: false,
             pinned: true,
-            backgroundColor: _backgroundColor,
+            // backgroundColor: _backgroundColor,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 widget.shoeName,
@@ -131,16 +156,21 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              background: Hero(
-                tag: 'shoe_image_${widget.id}',
-                child: Image.network(
-                  widget.imageUrl,
-                  fit: BoxFit.cover,
+              background: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
+                child: Hero(
+                  tag: 'shoe_image_${widget.id}',
+                  child: Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: _textColor),
+              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
               onPressed: () => PersistentNavBarNavigator.pop(context),
             ),
             actions: [
@@ -154,20 +184,20 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                     curve: Curves.fastOutSlowIn,
                     colorChangeAnimationCurve: Curves.easeInCubic,
                   ),
-                  badgeContent: Text('3', style: TextStyle(color: _backgroundColor)),
+                  badgeContent: Text('3', style: TextStyle(color: _textColor)),
                   badgeStyle: badges.BadgeStyle(badgeColor: _dominantColor),
                   child: Icon(
                     Icons.shopping_cart_outlined,
                     size: 30,
-                    color: _textColor,
+                    color: _dominantColor,
                   ),
                 ),
               )
             ],
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+            child: FadeTransition(
+              opacity: _fadeAnimation,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -218,7 +248,7 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                     style: GoogleFonts.poppins(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
-                      color: _dominantColor,
+                      color: _textColor,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -236,11 +266,14 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: ["UK", "US", "EU"]
-                          .map((s) => Padding(
+                          .map((s) => Container(
+                                alignment: Alignment.center,
                                 padding: const EdgeInsets.only(right: 8),
                                 child: GestureDetector(
-                                  onTap: () =>
-                                      setState(() => shoeSystem = s),
+                                  onTap: () {
+                                    _playSound();
+                                    setState(() => shoeSystem = s);
+                                  },
                                   child: system(s),
                                 ),
                               ))
@@ -268,10 +301,10 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                             margin: const EdgeInsets.only(right: 8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
-                              color: shoeSize ==
-                                      shoeSizeList[index].toString()
-                                  ? _dominantColor
-                                  : _backgroundColor,
+                              color:
+                                  shoeSize == shoeSizeList[index].toString()
+                                      ? _dominantColor
+                                      : _backgroundColor,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -284,10 +317,10 @@ class _ItemPageState extends State<ItemPage> with TickerProviderStateMixin {
                               shoeSizeList[index].toString(),
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600,
-                                color: shoeSize ==
-                                        shoeSizeList[index].toString()
-                                    ? _textColor
-                                    : _dominantColor,
+                                color:
+                                    shoeSize == shoeSizeList[index].toString()
+                                        ? _textColor
+                                        : _dominantColor,
                               ),
                             ),
                           ),
